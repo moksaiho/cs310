@@ -1,0 +1,9 @@
+{
+  "name": "cs310Project",
+  "version": "1.0.0",
+  "description": "a chat room enabling people to upload message and pictures",
+  "main": "index.js",
+  "repository": "https://github.com/moksaiho/cs310.git",
+  "author": "River Mu <xmu>",
+  "license": "MIT"
+}
