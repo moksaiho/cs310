@@ -4,7 +4,7 @@ import React from 'react';
 export default function OneChatRoom({
   name,
   time,
-  image,
+  imageURL,
   noMessage,
   lastMessage,
 }) {
@@ -12,21 +12,19 @@ export default function OneChatRoom({
     <View style={styles.container}>
       <Image
         source={{
-          uri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim.jpg',
+          uri: imageURL,
         }}
         style={styles.image}
       />
       <View style={styles.badgeContainer}>
-        <Text style={styles.badgeText}>4</Text>
+        <Text style={styles.badgeText}>{noMessage}</Text>
       </View>
       <View style={styles.rightContainer}>
         <View style={styles.row}>
-          <Text style={styles.name}>Elon Mask</Text>
-          <Text style={styles.time}>11.11 AM</Text>
+          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.time}>{time}</Text>
         </View>
-        <Text numberOfLines={1}>
-          Hola Hola coca colssssssssssssssssssssssssssssssssssssssssssssssa
-        </Text>
+        <Text numberOfLines={1}>{lastMessage}</Text>
       </View>
     </View>
   );
