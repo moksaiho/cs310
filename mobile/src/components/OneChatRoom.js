@@ -1,5 +1,6 @@
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
 import React from 'react';
+import {useNavigation} from '@react-navigation/core';
 
 export default function OneChatRoom({
   name,
@@ -8,8 +9,13 @@ export default function OneChatRoom({
   noMessage,
   lastMessage,
 }) {
+  const navigation = useNavigation();
   return (
-    <View style={styles.container}>
+    <Pressable
+      style={styles.container}
+      onPress={() => {
+        navigation.navigate('Chatroom');
+      }}>
       <Image
         source={{
           uri: imageURL,
@@ -26,7 +32,7 @@ export default function OneChatRoom({
         </View>
         <Text numberOfLines={1}>{lastMessage}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 }
 
