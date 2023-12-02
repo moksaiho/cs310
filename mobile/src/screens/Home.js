@@ -1,7 +1,8 @@
-import {View, Text, StyleSheet, Image, FlatList} from 'react-native';
+import {View, Text, StyleSheet, Image, FlatList, Pressable} from 'react-native';
 import React from 'react';
 import OneChatRoom from '../components/OneChatRoom';
 import data from '../assets/dummy-data/ChatRooms';
+import {signOut} from 'aws-amplify/auth';
 export default function Home() {
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -20,6 +21,9 @@ export default function Home() {
           );
         }}
       />
+      <Pressable onPress={signOut}>
+        <Text>log out</Text>
+      </Pressable>
     </View>
   );
 }
