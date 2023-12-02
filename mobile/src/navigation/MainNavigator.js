@@ -5,6 +5,8 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../screens/Home';
 import ChatRoomScreen from '../screens/ChatRoomScreen';
+import UserScreen from '../screens/UserScreen';
+import {useNavigation} from '@react-navigation/core';
 const Stack = createNativeStackNavigator();
 
 export default function MainNavigator() {
@@ -20,11 +22,13 @@ export default function MainNavigator() {
         component={ChatRoomScreen}
         options={{headerTitle: ChatroomHeader, headerBackTitleVisible: false}}
       />
+      <Stack.Screen name="Users" component={UserScreen} />
     </Stack.Navigator>
   );
 }
 
 const HomeHeader = props => {
+  const navigation = useNavigation();
   return (
     <View
       style={{
@@ -60,13 +64,25 @@ const HomeHeader = props => {
         </Text>
       </View>
       <Icon name="camerao" size={25} color="gray" style={{marginRight: 20}} />
-      <FeatherIcon name="edit" size={25} color="gray" />
+      <Pressable
+        onPress={() => {
+          // console.log("let's navigate");
+          navigation.navigate('Users');
+        }}>
+        <FeatherIcon
+          name="edit-2"
+          size={24}
+          color="black"
+          style={{marginHorizontal: 10}}
+        />
+      </Pressable>
     </View>
   );
 };
 
 const ChatroomHeader = props => {
   const {width} = useWindowDimensions();
+
   return (
     <View
       style={{
@@ -95,6 +111,7 @@ const ChatroomHeader = props => {
         color="black"
         style={{marginHorizontal: 10}}
       />
+
       <FeatherIcon
         name="edit-2"
         size={24}

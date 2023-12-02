@@ -16,12 +16,15 @@ exports.handler = async event => {
     return;
   }
   const now = new Date();
+  const timestamp = now.getTime();
   const userItem = {
-    _typename: {S: 'User'},
+    __typename: {S: 'User'},
+    _lastChangedAt: {N: timestamp.toString()},
+    _version: {N: '1'},
     createdAt: {S: now.toISOString()},
     updatedAt: {S: now.toISOString()},
-    id: {S: event?.request?.userAttributes?.sub},
-    imageUri: {S: event?.request?.userAttributes?.sub},
+    id: {S: event.request.userAttributes.sub},
+    name: {S: event.request.userAttributes.email},
   };
   const params = {
     Item: userItem,
