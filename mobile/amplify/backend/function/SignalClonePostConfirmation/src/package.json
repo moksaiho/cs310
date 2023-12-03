@@ -6,7 +6,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "aws-sdk": "^2.1510.0",
-    "axios": "latest"
+    "axios": "latest",
+    "mysql": "^2.18.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.92"
