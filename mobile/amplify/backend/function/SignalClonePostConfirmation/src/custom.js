@@ -78,13 +78,13 @@ exports.handler = async event => {
       console.log('No sub provided');
       return;
     }
-
+    const id = event?.request?.userAttributes?.sub;
     const name = event?.request?.userAttributes?.email;
-    let sql = `INSERT INTO users(username, imageUri)  
-                 values(?, '');`;
+    let sql = `INSERT INTO users(userid,username, imageUri)  
+                 values(?,?,?);`;
 
     const insertResult = await new Promise((resolve, reject) => {
-      dbConnection.query(sql, [name], (err, results, _) => {
+      dbConnection.query(sql, [id, name, null], (err, results, _) => {
         if (err) {
           console.log('87行', err);
           reject(err);

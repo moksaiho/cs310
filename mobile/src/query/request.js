@@ -11,6 +11,7 @@ const axiosServices = axios.create({
 
 const requestURL = {
   getUsers: 'users',
+  getAllMessages: 'messages',
 };
 
 async function request(url, datum, options) {

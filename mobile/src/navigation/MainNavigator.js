@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../screens/Home';
+import {signOut} from 'aws-amplify/auth';
 import ChatRoomScreen from '../screens/ChatRoomScreen';
 import UserScreen from '../screens/UserScreen';
 import {useNavigation} from '@react-navigation/core';
@@ -12,11 +13,11 @@ const Stack = createNativeStackNavigator();
 export default function MainNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Home"
         component={Home}
         options={{headerTitle: HomeHeader, headerStyle: null}}
-      />
+      /> */}
       <Stack.Screen
         name="Chatroom"
         component={ChatRoomScreen}
@@ -89,7 +90,7 @@ const ChatroomHeader = props => {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: width - 55,
-        marginLeft: -25,
+        // marginLeft: -25,
         padding: 10,
         alignItems: 'center',
         // backgroundColor: 'red',
@@ -102,10 +103,12 @@ const ChatroomHeader = props => {
       />
 
       <Pressable style={{flex: 1, marginLeft: 10}}>
-        <Text style={{fontWeight: 'bold'}}>good</Text>
+        <Text numberOfLines={1} style={{fontWeight: 'bold'}}>
+          Northwestern online chatting room
+        </Text>
       </Pressable>
 
-      <FeatherIcon
+      {/* <FeatherIcon
         name="camera"
         size={24}
         color="black"
@@ -117,7 +120,10 @@ const ChatroomHeader = props => {
         size={24}
         color="black"
         style={{marginHorizontal: 10}}
-      />
+      /> */}
+      <Pressable onPress={signOut}>
+        <Text>log out</Text>
+      </Pressable>
     </View>
   );
 };

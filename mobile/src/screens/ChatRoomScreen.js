@@ -3,16 +3,41 @@ import React from 'react';
 import Message from '../components/Message.jsx';
 import Chats from '../assets/dummy-data/Chats';
 import MessageInput from '../components/MessageInput.js';
+import {request, requestURL} from '../query/request.js';
+import {useState, useEffect} from 'react';
+import {getCurrentUser} from 'aws-amplify/auth';
 export default function ChatRoomScreen() {
-  const myid = Chats.users[1].id;
-  console.log(Chats.messages);
+  const [chat, setChat] = useState([]);
+  const [currentid, setCurrentId] = useState('');
+  useEffect(() => {
+    const fetchAllmessages = async () => {
+      try {
+        const {data} = await request(requestURL.getAllMessages, [], {
+          method: 'get',
+        });
+        setChat(data);
+      } catch (_) {
+        console.log(_);
+      }
+    };
+    fetchAllmessages();
+    getCurrentUser().then(({userId}) => {
+      setCurrentId(userId);
+    });
+  }, []);
+
   return (
     <>
       <FlatList
-        data={Chats.messages}
+        data={chat}
         renderItem={({item}) => {
+          console.log(currentid, item.userid);
           return (
-            <Message content={item.content} myMessage={myid == item.user.id} />
+            <Message
+              item={item}
+              content={item.content}
+              myMessage={currentid == item.userid}
+            />
           );
         }}
         style={styles.container}

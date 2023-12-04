@@ -35,6 +35,20 @@ app.get("/users", async (req, res) => {
     }
   });
 });
+app.get("/messages", async (req, res) => {
+  //   res.send("Hello, Express!");
+  let sql = `select * from messages order by timestamp DESC`;
+
+  dbConnection.query(sql, [], (err, results, _) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).send({ status: "fail", msg: err });
+    } else {
+      console.log("result是", results);
+      return res.status(200).send({ status: "success", data: results });
+    }
+  });
+});
 
 // Start the server
 app.listen(port, () => {
