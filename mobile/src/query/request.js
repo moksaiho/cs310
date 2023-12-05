@@ -11,7 +11,7 @@ const axiosServices = axios.create({
 
 const requestURL = {
   getUsers: 'users',
-  getAllMessages: 'messages',
+  messages: 'messages',
 };
 
 async function request(url, datum, options) {
@@ -36,6 +36,7 @@ async function request(url, datum, options) {
     }
     return res.data;
   } catch (error) {
+    console.log(error);
     if (error.response && error.response.data) {
       // 如果有服务器返回的错误消息，就把它作为错误对象的消息
       const serverMessage =

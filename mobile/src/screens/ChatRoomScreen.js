@@ -12,7 +12,7 @@ export default function ChatRoomScreen() {
   useEffect(() => {
     const fetchAllmessages = async () => {
       try {
-        const {data} = await request(requestURL.getAllMessages, [], {
+        const {data} = await request(requestURL.messages, [], {
           method: 'get',
         });
         setChat(data);
@@ -43,7 +43,7 @@ export default function ChatRoomScreen() {
         style={styles.container}
         inverted
       />
-      <MessageInput />
+      <MessageInput currentid={currentid} />
     </>
   );
 }

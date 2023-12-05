@@ -89,40 +89,31 @@ const ChatroomHeader = props => {
       style={{
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: width - 55,
+        width: width - 30,
         // marginLeft: -25,
         padding: 10,
         alignItems: 'center',
+        justifyContent: 'center',
         // backgroundColor: 'red',
       }}>
-      <Image
-        source={{
-          uri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/elon.png',
-        }}
-        style={{width: 30, height: 30, borderRadius: 30}}
-      />
-
-      <Pressable style={{flex: 1, marginLeft: 10}}>
-        <Text numberOfLines={1} style={{fontWeight: 'bold'}}>
-          Northwestern online chatting room
+      <Pressable>
+        <Text numberOfLines={1} style={{fontWeight: '900', fontSize: 20}}>
+          Northwestern chatting room
         </Text>
       </Pressable>
 
-      {/* <FeatherIcon
-        name="camera"
-        size={24}
-        color="black"
-        style={{marginHorizontal: 10}}
-      />
-
-      <FeatherIcon
-        name="edit-2"
-        size={24}
-        color="black"
-        style={{marginHorizontal: 10}}
-      /> */}
-      <Pressable onPress={signOut}>
-        <Text>log out</Text>
+      <Pressable
+        onPress={signOut}
+        style={{
+          position: 'absolute',
+          right: -10,
+          backgroundColor: 'red',
+          borderColor: 'white',
+          borderWidth: 1,
+          borderRadius: 8,
+          padding: 5,
+        }}>
+        <Text style={{color: 'white'}}>log out</Text>
       </Pressable>
     </View>
   );

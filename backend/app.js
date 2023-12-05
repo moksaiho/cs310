@@ -1,28 +1,14 @@
 const express = require("express");
-const mysql = require("mysql");
+const { DBconnection } = require("./database");
 const app = express();
+app.use(express.json());
 const port = 3000;
-const dbConnection = mysql.createConnection({
-  host: "mysql-nu-cs310.coyvpckopjmn.us-east-2.rds.amazonaws.com",
-  port: 3306,
-  user: "riverFinalApp-read-write",
-  password: "def456!!",
-  database: "riverFinalApp",
-  multipleStatements: true, // allow multiple queries in one call
-});
-
-dbConnection.connect();
-
-dbConnection.on("error", (err) => {
-  console.error("Database connection error:", err);
-});
-
-dbConnection.on("end", () => {
-  console.log("Database connection closed.");
-});
+console.log(DBconnection);
+const dbConnection = DBconnection();
 // Define a route
 app.get("/users", async (req, res) => {
   //   res.send("Hello, Express!");
+
   let sql = `select * from users`;
 
   dbConnection.query(sql, [], (err, results, _) => {
@@ -37,6 +23,7 @@ app.get("/users", async (req, res) => {
 });
 app.get("/messages", async (req, res) => {
   //   res.send("Hello, Express!");
+
   let sql = `select * from messages order by timestamp DESC`;
 
   dbConnection.query(sql, [], (err, results, _) => {
@@ -48,6 +35,31 @@ app.get("/messages", async (req, res) => {
       return res.status(200).send({ status: "success", data: results });
     }
   });
+});
+//
+app.post("/messages", async (req, res) => {
+  2.18;
+  //   res.send("Hello, Express!");
+  dbConnection.connect();
+  console.log(req.body);
+  const { userid, content } = req.body;
+  let time = new Date().toISOString().replace("T", " ").substring(0, 19);
+  let sql = `
+  INSERT INTO messages (userid, timestamp, content) VALUES (?, ?, ?);
+  `;
+
+  dbConnection.query(sql, [userid, time, content], (err, results, _) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).send({ status: "fail", msg: err });
+    } else {
+      console.log("result是", results);
+      return res
+        .status(200)
+        .send({ status: "success", data: {}, msg: "insert success" });
+    }
+  });
+  // dbConnection.close();
 });
 
 // Start the server

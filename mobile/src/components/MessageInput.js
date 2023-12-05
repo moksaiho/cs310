@@ -2,13 +2,20 @@ import {View, Text, StyleSheet, TextInput, Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
+import {request, requestURL} from '../query/request';
 import {useState} from 'react';
 import React from 'react';
 
-export default function MessageInput() {
+export default function MessageInput({currentid}) {
   const [text, changeText] = useState('');
-  const sendMessage = () => {
-    console.log('sending ', message);
+  const sendMessage = async () => {
+    // console.log('sending ', message);
+    try {
+      await request(requestURL.messages, {userid: currentid, content: text});
+    } catch (_) {
+      console.log(_);
+      alert(_);
+    }
     changeText('');
   };
   const handlePlus = () => {
@@ -16,7 +23,7 @@ export default function MessageInput() {
   };
 
   const handleSend = () => {
-    if (message) {
+    if (text) {
       sendMessage();
     } else {
       handlePlus();
@@ -35,14 +42,9 @@ export default function MessageInput() {
         <Icon name="camerao" size={25} color="gray" style={styles.icon} />
         <SimpleLineIcon name="microphone" size={25} color="gray" />
       </View>
-      <Pressable style={styles.buttonContainer} onPress>
+      <Pressable style={styles.buttonContainer} onPress={handleSend}>
         {text ? (
-          <FontIcon
-            name="send-o"
-            size={20}
-            color="white"
-            onPress={handleSend}
-          />
+          <FontIcon name="send-o" size={20} color="white" />
         ) : (
           <Text style={styles.buttonText}>+</Text>
         )}
