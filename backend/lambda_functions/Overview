@@ -1,1 +1,24 @@
+2 Lambda Functions: Pseudo Code
 
+1. void uploadMessage(int userid, string datatype, string body)
+  if datatype = ".txt":
+    create Entry in DB messages: (userid, datatype, body)
+  else:
+    generate unique bucketkey
+    decode body into bytes
+    upload bytes onto s3
+    create Entry in DB messages: (userid, datatype, bucketkey)
+
+  
+
+2. string[] loadLastNMessages(int n)
+  rows = "SELECT* from messages ORDER by messageid DESC LIMIT n"
+  output = []
+  for row in rows:
+    if row.datatype = ".txt":
+      output.append(row.body)
+    else:
+      bytes = retrieve image from s3 with bucketkey=row.body
+      output.append(encode(bytes))
+
+  return output
