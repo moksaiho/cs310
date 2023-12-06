@@ -34,7 +34,7 @@ export default function ChatRoomScreen() {
     <>
       <FlatList
         data={chat}
-        style={{backgroundColor: 'red', flex: 1, maxHeight: '90%'}}
+        style={{flex: 1, maxHeight: '90%'}}
         renderItem={({item}) => {
           return (
             <Message

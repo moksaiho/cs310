@@ -1,13 +1,24 @@
-import {View, Text, StyleSheet, TextInput, Pressable} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Pressable,
+  Image,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {request, requestURL} from '../query/request';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useState} from 'react';
 import React from 'react';
 import EmojiSelector, {Categories} from 'react-native-emoji-selector';
 import {KeyboardAvoidingView} from 'react-native';
+import {v4 as uuidv4} from 'uuid';
+
+import RNFS from 'react-native-fs';
 export default function MessageInput({currentid}) {
   // console.log('launchImageLibrary is ', launchImageLibrary);
   const [text, changeText] = useState('');
@@ -29,6 +40,20 @@ export default function MessageInput({currentid}) {
         let imageUri = response.uri || response.assets?.[0]?.uri;
         setSelectedImage(imageUri);
         console.log(imageUri);
+        RNFS.readFile(imageUri, 'base64').then(base64Image => {
+          request(
+            requestURL.uploadImage,
+            {name: uuidv4(), image: base64Image},
+            options,
+          ).then(
+            res => {
+              console.log('success', res);
+            },
+            e => {
+              console.log(e);
+            },
+          );
+        });
       }
     });
   };
@@ -54,28 +79,51 @@ export default function MessageInput({currentid}) {
       handlePlus();
     }
   };
+
+  const getImageBlob = async () => {
+    if (!image) return null;
+  };
   return (
-    <View style={styles.root}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          onChangeText={changeText}
-          value={text}
-          placeholder="Signal message..."
-        />
-        <Pressable onPress={openImagePicker}>
-          <FontIcon name="photo" size={25} color="gray" style={styles.icon} />
+    <>
+      {image && (
+        <View style={styles.sendImageContainer}>
+          <Image
+            source={{uri: image}}
+            style={{width: 100, height: 100, borderRadius: 10}}
+          />
+
+          <Pressable onPress={() => setSelectedImage(null)}>
+            <AntDesign
+              name="close"
+              size={24}
+              color="black"
+              style={{margin: 5}}
+            />
+          </Pressable>
+        </View>
+      )}
+      <View style={styles.root}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            onChangeText={changeText}
+            value={text}
+            placeholder="message..."
+          />
+          <Pressable onPress={openImagePicker}>
+            <FontIcon name="photo" size={25} color="gray" style={styles.icon} />
+          </Pressable>
+          <SimpleLineIcon name="microphone" size={25} color="gray" />
+        </View>
+        <Pressable style={styles.buttonContainer} onPress={handleSend}>
+          {text ? (
+            <FontIcon name="send-o" size={20} color="white" />
+          ) : (
+            <Text style={styles.buttonText}>+</Text>
+          )}
         </Pressable>
-        <SimpleLineIcon name="microphone" size={25} color="gray" />
       </View>
-      <Pressable style={styles.buttonContainer} onPress={handleSend}>
-        {text ? (
-          <FontIcon name="send-o" size={20} color="white" />
-        ) : (
-          <Text style={styles.buttonText}>+</Text>
-        )}
-      </Pressable>
-    </View>
+    </>
   );
 }
 
@@ -118,5 +166,14 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginHorizontal: 5,
+  },
+  sendImageContainer: {
+    flexDirection: 'row',
+    marginVertical: 10,
+    alignSelf: 'stretch',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: 'lightgray',
+    borderRadius: 10,
   },
 });

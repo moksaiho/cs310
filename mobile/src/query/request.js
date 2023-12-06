@@ -12,6 +12,7 @@ const axiosServices = axios.create({
 const requestURL = {
   getUsers: 'users',
   messages: 'messages',
+  uploadImage: 'upload',
 };
 
 async function request(url, datum, options) {
