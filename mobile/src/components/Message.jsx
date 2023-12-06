@@ -2,7 +2,6 @@ import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 
 export default function Message({myMessage, content, item}) {
-  // console.log(myMessage, content);
   return !myMessage ? (
     <View style={styles.container}>
       <Text style={styles.text}>{content}</Text>

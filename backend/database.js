@@ -6,6 +6,7 @@ const DBconnection = () => {
     user: "riverFinalApp-read-write",
     password: "def456!!",
     database: "riverFinalApp",
+    charset: "utf8mb4",
     multipleStatements: true, // allow multiple queries in one call
   });
 

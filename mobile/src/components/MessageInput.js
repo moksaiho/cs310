@@ -3,13 +3,37 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
 import {request, requestURL} from '../query/request';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useState} from 'react';
 import React from 'react';
-
+import EmojiSelector, {Categories} from 'react-native-emoji-selector';
+import {KeyboardAvoidingView} from 'react-native';
 export default function MessageInput({currentid}) {
+  // console.log('launchImageLibrary is ', launchImageLibrary);
   const [text, changeText] = useState('');
+  const [image, setSelectedImage] = useState('');
+  const openImagePicker = () => {
+    const options = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+
+    launchImageLibrary(options).then(response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setSelectedImage(imageUri);
+      }
+    });
+  };
   const sendMessage = async () => {
-    // console.log('sending ', message);
+    console.log('sending ', text);
+    setEmojiOpen(false);
     try {
       await request(requestURL.messages, {userid: currentid, content: text});
     } catch (_) {
@@ -32,14 +56,15 @@ export default function MessageInput({currentid}) {
   return (
     <View style={styles.root}>
       <View style={styles.inputContainer}>
-        <Icon name="smileo" size={25} color="gray" />
         <TextInput
           style={styles.input}
           onChangeText={changeText}
           value={text}
           placeholder="Signal message..."
         />
-        <Icon name="camerao" size={25} color="gray" style={styles.icon} />
+        <Pressable onPress={openImagePicker}>
+          <FontIcon name="photo" size={25} color="gray" style={styles.icon} />
+        </Pressable>
         <SimpleLineIcon name="microphone" size={25} color="gray" />
       </View>
       <Pressable style={styles.buttonContainer} onPress={handleSend}>
@@ -57,12 +82,15 @@ const styles = StyleSheet.create({
   root: {
     flexDirection: 'row',
     padding: 10,
+    minHeight: 120,
+
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   inputContainer: {
     backgroundColor: '#f2f2f2',
     flex: 1,
+
     marginRight: 10,
     borderRadius: 25,
     borderWidth: 1,

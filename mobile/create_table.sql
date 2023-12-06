@@ -1,6 +1,9 @@
-CREATE DATABASE IF NOT EXISTS riverFinalApp;
+CREATE DATABASE IF NOT EXISTS riverFinalApp
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
 
 USE riverFinalApp;
+
 
 
 DROP TABLE IF EXISTS messages;
@@ -24,7 +27,7 @@ CREATE TABLE messages
     messageid    int not null AUTO_INCREMENT,
     userid       varchar(256) not null,
     timestamp    datetime not null,
-    content      text not null,
+    content      text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     PRIMARY KEY  (messageid),
     FOREIGN KEY (userid) REFERENCES users(userid)
 );

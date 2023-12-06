@@ -8,7 +8,7 @@ export default function OneUser({
   imageURL,
 }) {
   const navigation = useNavigation();
-  console.log('name is', name);
+
   return (
     <Pressable
       style={styles.container}

@@ -6,9 +6,12 @@ import MessageInput from '../components/MessageInput.js';
 import {request, requestURL} from '../query/request.js';
 import {useState, useEffect} from 'react';
 import {getCurrentUser} from 'aws-amplify/auth';
+import {KeyboardAvoidingView} from 'react-native';
+import {Pressable} from 'react-native';
 export default function ChatRoomScreen() {
   const [chat, setChat] = useState([]);
   const [currentid, setCurrentId] = useState('');
+  const [emojiOpen, setEmojiOpen] = useState(false);
   useEffect(() => {
     const fetchAllmessages = async () => {
       try {
@@ -27,11 +30,12 @@ export default function ChatRoomScreen() {
   }, []);
 
   return (
+    // <Pressable onPress={setEmojiOpen.bind(null, false)}>
     <>
       <FlatList
         data={chat}
+        style={{backgroundColor: 'red', flex: 1, maxHeight: '90%'}}
         renderItem={({item}) => {
-          console.log(currentid, item.userid);
           return (
             <Message
               item={item}
@@ -40,11 +44,12 @@ export default function ChatRoomScreen() {
             />
           );
         }}
-        style={styles.container}
         inverted
       />
+
       <MessageInput currentid={currentid} />
     </>
+    // </Pressable>
   );
 }
 
