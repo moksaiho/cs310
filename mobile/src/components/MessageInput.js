@@ -28,6 +28,7 @@ export default function MessageInput({currentid}) {
       } else {
         let imageUri = response.uri || response.assets?.[0]?.uri;
         setSelectedImage(imageUri);
+        console.log(imageUri);
       }
     });
   };
