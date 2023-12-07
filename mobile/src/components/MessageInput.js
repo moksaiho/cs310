@@ -76,7 +76,7 @@ export default function MessageInput({currentid, socket}) {
 
     try {
       const location = await sendImage();
-      console.log('location is ', location);
+
       // await request(requestURL.messages, );
       socket.emit('message', {
         userid: currentid,
@@ -102,9 +102,6 @@ export default function MessageInput({currentid, socket}) {
     }
   };
 
-  const getImageBlob = async () => {
-    if (!image) return null;
-  };
   return (
     <>
       {image && (

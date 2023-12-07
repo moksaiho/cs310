@@ -14,13 +14,8 @@ export default function ChatRoomScreen() {
 
   const [chat, setChat] = useState([]);
   const [currentid, setCurrentId] = useState('');
-
+  const [username, setUsername] = useState('');
   useEffect(() => {
-    // socket.on('message', data => {
-    //   console.log(data);
-    // });
-    // socket.emit('message', {text: 'Hello, server!'});
-
     const fetchAllmessages = async () => {
       try {
         const {data} = await request(requestURL.messages, [], {
@@ -32,11 +27,12 @@ export default function ChatRoomScreen() {
       }
     };
     fetchAllmessages();
-    getCurrentUser().then(({userId}) => {
+    getCurrentUser().then(({userId, username}) => {
       setCurrentId(userId);
+      setUsername(username);
     });
     socket.on('message', data => {
-      console.log('socket io get data', data, chat);
+      console.log(data);
       setChat(chat => [data, ...chat]);
       // setChat([data, ...chat]);
     });
@@ -57,6 +53,8 @@ export default function ChatRoomScreen() {
               item={item}
               content={item.content}
               myMessage={currentid == item.userid}
+              image={item.image}
+              username={username}
             />
           );
         }}
