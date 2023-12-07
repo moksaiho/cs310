@@ -1,9 +1,9 @@
 use riverFinalApp;
-ALTER DATABASE  riverFinalApp CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER TABLE messages CHANGE content content TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
+-- ALTER DATABASE  riverFinalApp CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+-- ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- ALTER TABLE messages CHANGE content content TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
 
--- select * from messages
+select * from users
 -- describe messages
 -- insert into users(userid,imageUri) values ('7f79ae80-6e89-46b7-9cb2-524790e58267','');
 -- INSERT INTO messages (userid, timestamp, content) VALUES ('7f79ae80-6e89-46b7-9cb2-524790e58267', '2023-12-03 16:10:00', 'Hey! My day is going great, thanks for asking. How about yours?');

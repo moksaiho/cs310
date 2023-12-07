@@ -23,6 +23,35 @@ export default function MessageInput({currentid}) {
   // console.log('launchImageLibrary is ', launchImageLibrary);
   const [text, changeText] = useState('');
   const [image, setSelectedImage] = useState('');
+  const resetField = () => {
+    setSelectedImage('');
+    changeText('');
+  };
+
+  const sendImage = async () => {
+    if (!image) {
+      return;
+    }
+
+    // send message
+    try {
+      const base64Image = await RNFS.readFile(image, 'base64');
+      console.log(base64Image);
+      const resFromS3 = await request(requestURL.uploadImage, {
+        name: uuidv4(),
+        image: base64Image,
+      });
+      console.log(resFromS3);
+      // is {"data": {"Bucket": "photoapp-rivermu-cs310", "ETag": "\"01375385c01b78bc0be9942f4dbdd029\"", "Key": "River310App/1701905143906.jpg",
+      //  "Location": "https://photoapp-rivermu-cs310.s3.us-east-2.amazonaws.com/River310App/1701905143906.jpg",
+      //   "ServerSideEncryption": "AES256", "key": "River310App/1701905143906.jpg"}, "msg": "File uploaded successfully"}
+      console.log('return', resFromS3?.data?.Location);
+      return resFromS3?.data?.Location;
+    } catch (_) {
+      console.log(_);
+      alert('upload image to S3 bucket failed!');
+    }
+  };
   const openImagePicker = () => {
     const options = {
       mediaType: 'photo',
@@ -31,7 +60,7 @@ export default function MessageInput({currentid}) {
       maxWidth: 2000,
     };
 
-    launchImageLibrary(options).then(response => {
+    launchImageLibrary(options).then(async response => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -39,41 +68,29 @@ export default function MessageInput({currentid}) {
       } else {
         let imageUri = response.uri || response.assets?.[0]?.uri;
         setSelectedImage(imageUri);
-        console.log(imageUri);
-        RNFS.readFile(imageUri, 'base64').then(base64Image => {
-          request(
-            requestURL.uploadImage,
-            {name: uuidv4(), image: base64Image},
-            options,
-          ).then(
-            res => {
-              console.log('success', res);
-            },
-            e => {
-              console.log(e);
-            },
-          );
-        });
       }
     });
   };
   const sendMessage = async () => {
     console.log('sending ', text);
-    setEmojiOpen(false);
+
     try {
+      const location = await sendImage();
+      console.log('location is ', location);
       await request(requestURL.messages, {userid: currentid, content: text});
     } catch (_) {
       console.log(_);
       alert(_);
     }
-    changeText('');
+
+    resetField();
   };
   const handlePlus = () => {
     console.log('on plus clicked');
   };
 
   const handleSend = () => {
-    if (text) {
+    if (text || image) {
       sendMessage();
     } else {
       handlePlus();
@@ -116,7 +133,7 @@ export default function MessageInput({currentid}) {
           <SimpleLineIcon name="microphone" size={25} color="gray" />
         </View>
         <Pressable style={styles.buttonContainer} onPress={handleSend}>
-          {text ? (
+          {text || image ? (
             <FontIcon name="send-o" size={20} color="white" />
           ) : (
             <Text style={styles.buttonText}>+</Text>

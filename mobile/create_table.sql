@@ -27,7 +27,9 @@ CREATE TABLE messages
     messageid    int not null AUTO_INCREMENT,
     userid       varchar(256) not null,
     timestamp    datetime not null,
-    content      text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    content      text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    image        text,
+
     PRIMARY KEY  (messageid),
     FOREIGN KEY (userid) REFERENCES users(userid)
 );
