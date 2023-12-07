@@ -1,7 +1,8 @@
 import {View, Text, StyleSheet, FlatList} from 'react-native';
 import React from 'react';
 import Message from '../components/Message.jsx';
-import Chats from '../assets/dummy-data/Chats';
+import io from 'socket.io-client';
+
 import MessageInput from '../components/MessageInput.js';
 import {request, requestURL} from '../query/request.js';
 import {useState, useEffect} from 'react';
@@ -9,10 +10,17 @@ import {getCurrentUser} from 'aws-amplify/auth';
 import {KeyboardAvoidingView} from 'react-native';
 import {Pressable} from 'react-native';
 export default function ChatRoomScreen() {
+  const socket = io('http://10.0.2.2:3000/');
+
   const [chat, setChat] = useState([]);
   const [currentid, setCurrentId] = useState('');
-  const [emojiOpen, setEmojiOpen] = useState(false);
+
   useEffect(() => {
+    // socket.on('message', data => {
+    //   console.log(data);
+    // });
+    // socket.emit('message', {text: 'Hello, server!'});
+
     const fetchAllmessages = async () => {
       try {
         const {data} = await request(requestURL.messages, [], {
@@ -27,6 +35,14 @@ export default function ChatRoomScreen() {
     getCurrentUser().then(({userId}) => {
       setCurrentId(userId);
     });
+    socket.on('message', data => {
+      console.log('socket io get data', data, chat);
+      setChat(chat => [data, ...chat]);
+      // setChat([data, ...chat]);
+    });
+    return () => {
+      socket.off('message');
+    };
   }, []);
 
   return (
@@ -47,7 +63,7 @@ export default function ChatRoomScreen() {
         inverted
       />
 
-      <MessageInput currentid={currentid} />
+      <MessageInput currentid={currentid} socket={socket} />
     </>
     // </Pressable>
   );

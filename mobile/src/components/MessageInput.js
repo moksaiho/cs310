@@ -19,7 +19,7 @@ import {KeyboardAvoidingView} from 'react-native';
 import {v4 as uuidv4} from 'uuid';
 
 import RNFS from 'react-native-fs';
-export default function MessageInput({currentid}) {
+export default function MessageInput({currentid, socket}) {
   // console.log('launchImageLibrary is ', launchImageLibrary);
   const [text, changeText] = useState('');
   const [image, setSelectedImage] = useState('');
@@ -36,12 +36,12 @@ export default function MessageInput({currentid}) {
     // send message
     try {
       const base64Image = await RNFS.readFile(image, 'base64');
-      console.log(base64Image);
+
       const resFromS3 = await request(requestURL.uploadImage, {
         name: uuidv4(),
         image: base64Image,
       });
-      console.log(resFromS3);
+      // console.log(resFromS3);
       // is {"data": {"Bucket": "photoapp-rivermu-cs310", "ETag": "\"01375385c01b78bc0be9942f4dbdd029\"", "Key": "River310App/1701905143906.jpg",
       //  "Location": "https://photoapp-rivermu-cs310.s3.us-east-2.amazonaws.com/River310App/1701905143906.jpg",
       //   "ServerSideEncryption": "AES256", "key": "River310App/1701905143906.jpg"}, "msg": "File uploaded successfully"}
@@ -77,7 +77,12 @@ export default function MessageInput({currentid}) {
     try {
       const location = await sendImage();
       console.log('location is ', location);
-      await request(requestURL.messages, {userid: currentid, content: text});
+      // await request(requestURL.messages, );
+      socket.emit('message', {
+        userid: currentid,
+        content: text,
+        image: location,
+      });
     } catch (_) {
       console.log(_);
       alert(_);
