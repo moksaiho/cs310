@@ -4,7 +4,7 @@ const DBconnection = () => {
     host: "mysql-nu-cs310.coyvpckopjmn.us-east-2.rds.amazonaws.com",
     port: 3306,
     user: "riverFinalApp-read-write",
-    password: "def456!!",
+    password: "xxxxxxxx",
     database: "riverFinalApp",
     charset: "utf8mb4",
     multipleStatements: true, // allow multiple queries in one call
